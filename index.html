@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SkillForge - Courses</title>
+    <meta name="description" content="Discover, filter, and learn with curated online courses.">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <script>
+      const theme = localStorage.getItem('theme');
+      if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+      }
+    </script>
+  </head>
+  <body class="bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100">
+    <div id="sale-popup" class="fixed inset-0 hidden items-center justify-center z-50">
+      <div class="absolute inset-0 bg-black/40"></div>
+      <div class="relative bg-white dark:bg-gray-800 rounded-xl shadow-2xl p-6 w-[92%] max-w-md">
+        <h3 class="text-2xl font-bold">Diwali Mega Sale 🎉</h3>
+        <p class="mt-2 text-gray-600 dark:text-gray-300">Get 60% off on all courses. Use code <span class="font-mono font-semibold">LIGHT60</span></p>
+        <div class="mt-4 flex items-center gap-3">
+          <input id="dont-show" type="checkbox" class="h-4 w-4">
+          <label for="dont-show" class="text-sm">Don't show this again</label>
+        </div>
+        <div class="mt-6 flex gap-3">
+          <button id="apply-sale" class="btn btn-primary">Shop Now</button>
+          <button id="close-sale" class="btn btn-ghost">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <header class="sticky top-0 z-40 bg-white/80 dark:bg-gray-900/70 backdrop-blur border-b border-gray-200/60 dark:border-gray-800">
+      <nav class="container mx-auto px-4 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <div class="h-9 w-9 rounded bg-gradient-to-br from-indigo-500 to-violet-600 grid place-items-center text-white font-bold">SF</div>
+          <span class="font-semibold">SkillForge</span>
+        </div>
+        <div class="hidden md:flex items-center gap-1">
+          <a href="#" class="nav-link">Home</a>
+          <a href="#courses" class="nav-link">Courses</a>
+          <a href="#about" class="nav-link">About</a>
+          <a href="#contact" class="nav-link">Contact</a>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="theme-toggle" class="icon-btn" aria-label="Toggle theme">
+            <svg id="theme-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 w-5 hidden dark:block fill-yellow-400"><path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.8 1.42-1.42zm10.48 14.32l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM12 4V1h-1v3h1zm0 19v-3h-1v3h1zM4 12H1v1h3v-1zm19 0h-3v1h3v-1zM6.76 19.16l-1.42 1.42 1.8 1.79 1.41-1.41-1.79-1.8zM19.16 6.76l1.42-1.42-1.79-1.8-1.41 1.41 1.78 1.81z"/></svg>
+            <svg id="theme-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 w-5 dark:hidden fill-gray-700"><path d="M21.64 13a9 9 0 01-11.31 8.94A9 9 0 1012 3a7 7 0 009.64 10z"/></svg>
+          </button>
+          <button id="mobile-menu-btn" class="icon-btn md:hidden" aria-label="Open menu">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
+          </button>
+        </div>
+      </nav>
+      <div id="mobile-menu" class="md:hidden hidden border-t border-gray-200 dark:border-gray-800">
+        <div class="px-4 py-3 flex flex-col gap-2">
+          <a href="#" class="nav-link">Home</a>
+          <a href="#courses" class="nav-link">Courses</a>
+          <a href="#about" class="nav-link">About</a>
+          <a href="#contact" class="nav-link">Contact</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="container mx-auto px-4">
+      <section class="py-10 flex flex-col gap-6">
+        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+          <div>
+            <h1 class="text-3xl md:text-4xl font-bold">Curated Online Courses</h1>
+            <p class="mt-1 text-gray-600 dark:text-gray-300">Filter, compare, and bookmark your next learning path.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <input id="search" type="search" placeholder="Search courses..." class="input w-64" />
+            <select id="sort" class="input">
+              <option value="relevance">Sort: Relevance</option>
+              <option value="price-asc">Price: Low to High</option>
+              <option value="price-desc">Price: High to Low</option>
+              <option value="rating-desc">Rating: High to Low</option>
+              <option value="newest">Newest</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          <aside class="lg:col-span-1 space-y-4">
+            <div class="card p-4 space-y-3">
+              <h3 class="font-semibold">Filters</h3>
+              <div>
+                <label class="label">Category</label>
+                <select id="filter-category" class="input">
+                  <option value="all">All</option>
+                  <option>Web Dev</option>
+                  <option>Data</option>
+                  <option>Design</option>
+                  <option>AI/ML</option>
+                </select>
+              </div>
+              <div>
+                <label class="label">Level</label>
+                <div class="flex flex-wrap gap-2">
+                  <button data-level="All" class="chip chip-active">All</button>
+                  <button data-level="Beginner" class="chip">Beginner</button>
+                  <button data-level="Intermediate" class="chip">Intermediate</button>
+                  <button data-level="Advanced" class="chip">Advanced</button>
+                </div>
+              </div>
+              <div>
+                <label class="label">Price Range</label>
+                <input id="price-range" type="range" min="0" max="200" value="200" class="w-full" />
+                <div class="text-sm text-gray-600 dark:text-gray-300"><span id="price-label">Up to $200</span></div>
+              </div>
+              <div>
+                <label class="label">Minimum Rating</label>
+                <input id="rating-range" type="range" min="0" max="5" step="0.5" value="0" class="w-full" />
+                <div class="text-sm text-gray-600 dark:text-gray-300"><span id="rating-label">0★ and up</span></div>
+              </div>
+              <div class="flex items-center justify-between">
+                <button id="reset-filters" class="btn btn-ghost">Reset</button>
+                <button id="apply-filters" class="btn btn-primary">Apply</button>
+              </div>
+            </div>
+
+            <div class="card p-4 space-y-3">
+              <h3 class="font-semibold">Wishlist</h3>
+              <div id="wishlist" class="space-y-2 text-sm"></div>
+            </div>
+          </aside>
+
+          <section class="lg:col-span-3 space-y-4" id="courses">
+            <div class="flex items-center justify-between">
+              <span id="results-count" class="text-sm text-gray-600 dark:text-gray-300"></span>
+              <button id="clear-compare" class="btn btn-ghost hidden">Clear Compare</button>
+            </div>
+            <div id="courses-grid" class="grid sm:grid-cols-2 xl:grid-cols-3 gap-4"></div>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <div id="compare-tray" class="fixed bottom-4 left-1/2 -translate-x-1/2 hidden bg-white dark:bg-gray-800 shadow-lg border border-gray-200 dark:border-gray-700 rounded-xl p-3 w-[92%] max-w-3xl">
+      <div class="flex items-center justify-between">
+        <div id="compare-items" class="flex items-center gap-2"></div>
+        <button id="open-compare" class="btn btn-primary">Compare</button>
+      </div>
+    </div>
+
+    <div id="compare-modal" class="fixed inset-0 hidden items-center justify-center z-50">
+      <div class="absolute inset-0 bg-black/50"></div>
+      <div class="relative bg-white dark:bg-gray-800 rounded-xl shadow-2xl p-6 w-[96%] max-w-5xl overflow-auto max-h-[90vh]">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-xl font-semibold">Compare Courses</h3>
+          <button id="close-compare" class="icon-btn">✕</button>
+        </div>
+        <div id="compare-table" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
+      </div>
+    </div>
+
+    <div id="quickview-modal" class="fixed inset-0 hidden items-center justify-center z-50">
+      <div class="absolute inset-0 bg-black/40"></div>
+      <div class="relative bg-white dark:bg-gray-800 rounded-xl shadow-2xl p-6 w-[92%] max-w-2xl">
+        <div class="flex items-center justify-between">
+          <h3 id="qv-title" class="text-xl font-semibold"></h3>
+          <button id="qv-close" class="icon-btn">✕</button>
+        </div>
+        <p id="qv-desc" class="mt-3 text-gray-600 dark:text-gray-300"></p>
+        <div id="qv-meta" class="mt-4 text-sm"></div>
+      </div>
+    </div>
+
+    <div id="chatbot" class="fixed bottom-4 right-4 z-50">
+      <div id="chat-window" class="hidden bg-white dark:bg-gray-800 rounded-xl shadow-xl w-80 max-h-[70vh] flex flex-col overflow-hidden">
+        <div class="p-3 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <div class="h-7 w-7 rounded-full bg-gradient-to-br from-indigo-500 to-violet-600"></div>
+            <span class="font-semibold text-sm">SkillBot</span>
+          </div>
+          <button id="chat-close" class="icon-btn">✕</button>
+        </div>
+        <div id="chat-log" class="p-3 space-y-2 overflow-auto flex-1"></div>
+        <form id="chat-form" class="p-3 border-t border-gray-200 dark:border-gray-700 flex items-center gap-2">
+          <input id="chat-input" class="input flex-1" placeholder="Ask about courses..." />
+          <button class="btn btn-primary">Send</button>
+        </form>
+      </div>
+      <button id="chat-toggle" class="btn btn-primary rounded-full shadow-lg">Chat</button>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
